@@ -1,0 +1,160 @@
+<html>
+
+<body>
+
+	<h1>Exo2</h1>
+
+	<h1>getCurrentPosition</h1>
+	
+	<p>Position : </p>
+	<li>Longitude: <span id="Long"></span></li>
+	<li>Latitude: <span id="Lati"></span></li>
+	<p>Precision de la mesure : <span id="Prec"></span></p>
+	<p>Vitesse : <span id="Spd"></span></p>
+	<p>Time Stamp :<span id="Time"></span></p>
+	
+	<h1>watchPosition</h1>
+	
+	
+	<p>Position : </p>
+	<li>Longitude: <span id="Long_"></span></li>
+	<li>Latitude: <span id="Lati_"></span></li>
+	<p>Precision de la mesure : <span id="Prec_"></span></p>
+	<p>Vitesse : <span id="Spd_"></span></p>
+	<p>Time Stamp :<span id="Time_"></span></p>
+	
+	
+	<h1>Exo3</h1>
+	
+	<li>X : <span id="alpha"></span></li>
+	<li>Y : <span id="beta"></span></li>
+	<li>Z : <span id="gamma"></span></li>
+	
+	<li>SpeedX : <span id="speed_alpha"></span></li>
+	<li>SpeedY : <span id="speed_beta"></span></li>
+	<li>SpeedZ : <span id="speed_gamma"></span></li>
+	
+	<li>OrientationX : <span id="orientation_alpha"></span></li>
+	<li>OrientationY : <span id="orientation_beta"></span></li>
+	<li>OrientationZ : <span id="orientation_gamma"></span></li>
+	
+	
+	
+</body>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+<script>
+
+//======getCurrentPosition=========//
+	var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function success(pos) {
+  var crd = pos.coords;
+
+  var lo = crd.longitude;
+  var la = crd.latitude;
+  var pr = crd.accuracy;
+  var sp = crd.speed;
+  var ts = pos.timestamp;
+  
+  $(Long).append(lo);
+  $(Lati).append(la);
+  $(Prec).append(pr);
+  $(Spd).append(sp);
+  $(Time).append(ts);
+
+}
+
+function error(err) {
+  console.warn(`ERREUR (${err.code}): ${err.message}`);
+}
+
+navigator.geolocation.getCurrentPosition(success, error, options);
+
+//========watchPosition========//
+
+var id, target, options_;
+
+function success_(pos) {
+  var crd = pos.coords;
+
+  if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
+	
+  var lo_ = crd.longitude;
+  var la_ = crd.latitude;
+  var pr_ = crd.accuracy;
+  var sp_ = crd.speed;
+  var ts_ = pos.timestamp;
+  
+  $(Long_).append(lo_);
+  $(Lati_).append(la_);
+  $(Prec_).append(pr_);
+  $(Spd_).append(sp_);
+  $(Time_).append(ts_);
+  
+  
+    navigator.geolocation.clearWatch(id);
+  }
+}
+
+function error_(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+}
+
+target = {
+  latitude : 0,
+  longitude: 0
+};
+
+options_ = {
+  enableHighAccuracy: false,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+id = navigator.geolocation.watchPosition(success_, error_, options_);
+
+
+//===OrientationDevice===//
+
+
+if (window.DeviceOrientationEvent)
+{
+  window.addEventListener('deviceorientation', function(event){
+  
+	$('#alpha').append(event.alpha);
+	$('#beta').append(event.beta);
+	$('#gamma').append(event.gamma);
+  
+ 
+});
+}
+
+if (window.DeviceMotionEvent) {
+  window.addEventListener('devicemotion', function(orientation){
+  
+	$('#speed_alpha').append(orientation.acceleration.x);
+	$('#speed_beta').append(orientation.acceleration.y);
+	$('#speed_gamma').append(orientation.acceleration.z);
+	
+	$('#orientation_alpha').append(orientation.rotationRate.alpha);
+	$('#orientation_beta').append(orientation.rotationRate.beta);
+	$('#orientation_gamma').append(orientation.rotationRate.gamma);
+	
+	
+  
+  });
+}
+
+//===TouchEvent===//
+
+
+
+</script>
+
+</html>
