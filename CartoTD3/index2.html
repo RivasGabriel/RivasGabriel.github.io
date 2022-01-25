@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="application/javascript">
+    var Night = false;
+    $(document).ready(function () {
+        $('#praise').click(function () {
+
+            if (!Night) {
+                Night = true;
+                document.getElementById('praise').className.baseVal = 'night';
+            } else {
+
+                Night = false;
+                document.getElementById('praise').className.baseVal = 'day';
+            }
+        });
+    });
+      </script>
+
+    <style type="text/css">
+        canvas { border: 1px solid black; }
+
+        .day {
+            fill: #ebfb00;
+        }
+
+        .night {
+            fill: #6f73a3;
+        }
+    </style>
+
+</head>
+<body onload="draw();">
+    <svg width="500" height="500">
+        <rect id="ciel" x="0" y="0" width="500" height="500" style="fill:rgb(12, 193, 243)"/>
+        <rect id="plaine" x="0" y="360" width="500" height="140" style="fill:rgb(20, 255, 20)"/>
+        <polygon id="montA" points="20,360 60,170 100,360" style="fill:rgb(110, 83, 20)" stroke="black" stroke-width="3" />
+        <polygon id="montB" points="60,360 130,150 180,360" style="fill:rgb(110, 83, 20)" stroke="black" stroke-width="3" />
+        <polygon id="montC" points="250,360 300,100 350,360" style="fill:rgb(110, 83, 20)"  stroke="black" stroke-width="3"/>
+        <circle id="praise" cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="yellow" />
+        <rect id="maison" x="50" y="420" width="80" height="80" style="fill:rgb(240, 198, 62)" stroke="black" stroke-width="1"/>
+        <polygon id="toit" points="50,420 90,380 130,420" style="fill:rgb(88, 6, 4)"  stroke="black" stroke-width="1"/>
+        <rect id="porte" x="80" y="450" width="30" height="50" style="fill:rgb(25, 26, 36)" stroke="black" stroke-width="1"/>
+
+
+
+    </svg>
+</body>
+</html>
