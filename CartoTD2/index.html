@@ -29,6 +29,7 @@
 </html>
 
 <script>
+ 
 navigator.geolocation.getCurrentPosition(function(position)
 {
     var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 30);
@@ -39,7 +40,11 @@ navigator.geolocation.getCurrentPosition(function(position)
     }).addTo(map);
 
     L.marker([position.coords.latitude, position.coords.longitude]).addTo(map)
-    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+    .bindPopup('IUT')
+    .openPopup();
+
+    L.marker([43.7, 7.26]).addTo(map)
+    .bindPopup('Nice')
     .openPopup();
 }) 
 

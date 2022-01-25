@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin="">
+        </script>
+
+<script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
+
+        <style>
+        #map
+        {
+            height: 900px;
+            max-width: none;
+        }
+        </style>
+
+</head>
+<body>
+    <div id="map">
+            
+    </div>
+</body>
+</html>
+
+<script>
+ 
+    navigator.geolocation.getCurrentPosition(function(position)
+    {
+        var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 30);
+    
+        L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
+        {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var TriangleBermude = L.polygon([
+        [18.466, -66.118],
+        [32.321,-64.757 ],
+        [25.774,-80.19 ]
+        ],{color: 'red'}).addTo(map);
+
+
+    var CercleBermude = L.circle([76.561/3, -211.065/3], {
+    color: 'green',
+    fillColor: '#f03',
+    fillOpacity: 0.3,
+    radius: position.coords.accuracy
+    }).addTo(map);
+
+    var MarseilleNice = L.polygon([
+    [43.29, 5.36],
+    [43.7, 7.26]
+    ],{color : 'red'}).addTo(map);
+    
+
+    L.marker([43.495, 6.31]).addTo(map)
+    .bindPopup('Distance Marseille-Nice : 159.24 km')
+    .openPopup();
+    
+        
+    
+    }) 
+    
+    
+    </script>
