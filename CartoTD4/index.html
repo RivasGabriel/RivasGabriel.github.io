@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="threejs/three.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+    <script>
+
+        var radian_earth = 20;
+        //scence
+        var scene = new THREE.Scene();
+        scene.background = new THREE.TextureLoader().load('sky.png');
+        //camera
+        var camera = new THREE.PerspectiveCamera( 45,window.innerWidth/window.innerHeight, 0.1, 10000 );
+        camera.position.set( 0, 0, 80 );
+        //render
+        var renderer = new THREE.WebGLRenderer( {antialias: true} );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+        //lumiere
+        var lumiere = new THREE.DirectionalLight( 0xffffff );
+        lumiere.position.set( 10, 10, 10 );
+        scene.add( lumiere );
+
+
+        function convert(lat,long,rad)
+        {
+            var phi   = (lat)*(Math.PI/180);
+            var theta = (-long)*(Math.PI/180);
+            x = (((rad) * Math.cos(phi)*Math.cos(theta)));
+            z = (((rad) * Math.cos(phi)*Math.sin(theta)));
+            y = ((rad) * Math.sin(phi));
+
+            return [x,y,z];
+        }
+
+
+    var options =
+    {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
+    function MyPos(pos)
+    {
+        var crd = pos.coords;
+
+         //point
+        var sphereping = new THREE.SphereGeometry(0.5, 8, 8);
+        var pingmaterial = new THREE.MeshPhongMaterial({color : 0xff0000});
+        
+        pos = convert(crd.latitude, crd.longitude, radian_earth);
+
+        var ping = new THREE.Mesh(sphereping, pingmaterial);
+        ping.position.set(pos[0], pos[1], pos[2]);
+        sphere.attach(ping);
+        console.log(pos[0] + " - - - " + pos[1] + " - - - " + pos[2]);
+
+    }
+
+function error(err) {
+  console.warn(`ERREUR (${err.code}): ${err.message}`);
+}
+
+navigator.geolocation.getCurrentPosition(MyPos, error, options);
+
+
+        fetch("./country.json")
+        .then(reponse=>reponse.json()).then(array=>array.forEach(element => {
+            var spherepays = new THREE.SphereGeometry(0.5, 8, 8);
+            var texturepays = new THREE.TextureLoader().load(element["flags"]["png"]);
+            var materialpays = new THREE.MeshPhongMaterial({map: texturepays});
+
+            paysposition = convert(element["latlng"][0],element["latlng"][1],radian_earth);
+
+            var pays = new THREE.Mesh(spherepays,materialpays);
+            pays.position.set(paysposition[0],paysposition[1],paysposition[2])
+            sphere.attach(pays);
+        }));
+
+        
+
+
+        //sphere
+        var texturesphere = new THREE.TextureLoader().load('map.jpg');
+
+        var geometry = new THREE.SphereGeometry( radian_earth, 24, 24);
+        var material = new THREE.MeshPhongMaterial({map: texturesphere});
+
+        var sphere = new THREE.Mesh( geometry, material );
+        scene.add( sphere );
+        
+        //annimation
+        var animate = function ()
+        {
+        requestAnimationFrame( animate );
+        //sphere.rotation.x += 0.01;
+        sphere.rotation.y += 0.01;
+        renderer.render( scene, camera );
+        };
+        animate();
+        
+
+    </script>
+</body>
+</html> 
+
